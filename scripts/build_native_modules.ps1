@@ -322,6 +322,7 @@ if (!(Test-Path -LiteralPath $clang)) {
   "-Wl,--export=soemdsp_creature_health" `
   "-Wl,--export=soemdsp_creature_mood" `
   "-Wl,--export=soemdsp_creature_alive" `
+  "-Wl,--export=soemdsp_creature_ear_protect" `
   "-Wl,--export=soemdsp_creature_version" `
   "-Wl,--export=soemdsp_creature_metadata_json" `
   "-Wl,--export=soemdsp_creature_metadata_json_size" `

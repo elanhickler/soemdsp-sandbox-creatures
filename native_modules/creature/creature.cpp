@@ -22,7 +22,7 @@ static const char kMetadataJson[] =
     "\"targetType\":\"creature\","
     "\"kind\":\"life\","
     "\"inputs\":[\"In\"],"
-    "\"outputs\":[\"Hunger\",\"Health\",\"Mood\",\"Alive\"],"
+    "\"outputs\":[\"Hunger\",\"Health\",\"Mood\",\"Alive\",\"EarProtect\"],"
     "\"parameters\":["
       "{"
         "\"key\":\"comfortLow\","
@@ -88,6 +88,7 @@ struct CreatureState {
   double harshness;         // smoothed |sample-to-sample jump|
   double railHeat;          // smoothed "sitting at/near full scale"
   double meltdownHeat;      // 0..1, rises while harshness+railHeat both high
+  double earProtect;        // 0..1, an actual gain-reduction request, not just a label
 
   double hunger;            // 0..1
   double recentlyHungry;    // decaying latch: "was hungry a moment ago"
@@ -158,6 +159,7 @@ extern "C" int soemdsp_creature_create() {
       s.harshness = 0.0;
       s.railHeat = 0.0;
       s.meltdownHeat = 0.0;
+      s.earProtect = 0.0;
       s.hunger = 0.3;
       s.recentlyHungry = 0.0;
       s.health = 1.0;
@@ -255,6 +257,14 @@ extern "C" void soemdsp_creature_process(
   const double meltdownCoeff = one_pole_coefficient(meltdownTarget > s.meltdownHeat ? 0.15 : 1.0, rate);
   s.meltdownHeat = clamp(s.meltdownHeat + (meltdownTarget - s.meltdownHeat) * meltdownCoeff, 0.0, 1.0);
 
+  // --- ear protection: the first real "act back into the patch" instead of
+  // just reporting a mood. Limiter-style attack/release -- snaps on almost
+  // instantly (don't wait for meltdownHeat to fully ramp), releases gently
+  // so it doesn't chatter the moment the signal calms down for a moment.
+  const double earProtectTarget = meltdownTarget;
+  const double earProtectCoeff = one_pole_coefficient(earProtectTarget > s.earProtect ? 0.01 : 1.5, rate);
+  s.earProtect = clamp(s.earProtect + (earProtectTarget - s.earProtect) * earProtectCoeff, 0.0, 1.0);
+
   // --- hunger ------------------------------------------------------------
   // Recovers only in the comfort band while the signal is steady; rises
   // from being too quiet (faster the closer to true silence), and rises
@@ -345,6 +355,11 @@ extern "C" double soemdsp_creature_mood(int handle) {
 extern "C" double soemdsp_creature_alive(int handle) {
   if (handle < 1 || handle > kMaxInstances) return 0.0;
   return gPool[handle - 1].alive ? 1.0 : 0.0;
+}
+
+extern "C" double soemdsp_creature_ear_protect(int handle) {
+  if (handle < 1 || handle > kMaxInstances) return 0.0;
+  return gPool[handle - 1].earProtect;
 }
 
 extern "C" int soemdsp_creature_version() {

@@ -1245,7 +1245,7 @@ function nodeGraphCreatureSample(state, input, params, sampleRate, runtime = nul
   // All of the creature's actual behavior lives in the C++/WASM module by
   // design -- this is just the offline-evaluator glue plus an idle fallback
   // for when the WASM hasn't loaded yet, not a parallel reimplementation.
-  const idle = { Hunger: 30, Health: 100, Mood: 0, Alive: 1 };
+  const idle = { Hunger: 30, Health: 100, Mood: 0, Alive: 1, "Ear Protect": 0 };
   const native = runtime?.nativeCreatureReady ? runtime?.nativeCreature : null;
   if (!native?.soemdsp_creature_create || !native?.soemdsp_creature_process) {
     return idle;
@@ -1272,6 +1272,7 @@ function nodeGraphCreatureSample(state, input, params, sampleRate, runtime = nul
       Health: nodeGraphSafeFilterNumber(native.soemdsp_creature_health?.(state.nativeHandle), runtime, nodeId, null, "Creature health"),
       Mood: nodeGraphSafeFilterNumber(native.soemdsp_creature_mood?.(state.nativeHandle), runtime, nodeId, null, "Creature mood"),
       Alive: nodeGraphSafeFilterNumber(native.soemdsp_creature_alive?.(state.nativeHandle), runtime, nodeId, null, "Creature alive"),
+      "Ear Protect": nodeGraphSafeFilterNumber(native.soemdsp_creature_ear_protect?.(state.nativeHandle), runtime, nodeId, null, "Creature ear protect"),
     };
   } catch (error) {
     if (runtime) {

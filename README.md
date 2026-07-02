@@ -79,10 +79,13 @@ recognize good listening conditions and reward them, not just tolerate them:
   analog-style saturation, beautiful rounded squares. That's a different thing entirely from
   actually breaking: only once those rounded corners flatten out into a real square wave should it
   read as something wrong.
-- **Meltdown has teeth.** When a signal really is that harsh, Meltdown shouldn't just be a mood
-  label — it should be the moment to act, not just report: an "ear protection engaged" response
-  that actually pulls the level back, closing the loop described in
-  [Agentic personality](#agentic-personality) below.
+- **Meltdown has teeth.** ✅ *Implemented.* The Creature now has a fifth output, `Ear Protect`
+  (0–1), that engages within ~200ms of a genuine Meltdown and releases gently over 1–2 seconds
+  rather than chattering — a real gain-reduction request a downstream module can act on, not just a
+  mood label. Verified directly against the compiled `.wasm`: clean at −12dB, snaps to `1.0` well
+  before Meltdown even finishes latching in as the displayed mood, and eases back down as the
+  signal calms. This is the first concrete instance of
+  [Agentic personality](#agentic-personality)'s "acting back into the patch" idea, below.
 
 The long-term goal is a companion that lives inside your patch and helps shape the music by mood —
 quiet when you want quiet, warm when you want warmth, and genuinely protective when something's
@@ -136,10 +139,11 @@ None of this is implemented yet — it's a direction, not a spec.
 
 ## Agentic personality
 
-Right now the Creature only reports what it senses — Hunger, Health, and Mood flow outward, but
-nothing flows back in. The next idea is a small closed loop of its own: **perceive → decide → act**,
-with a persistent personality that colors every step, so two Creature nodes wired to the same
-signal don't necessarily behave the same way.
+Mostly, the Creature still just reports what it senses — Hunger, Health, and Mood flow outward.
+`Ear Protect` (above) is the first crack in that: an output that isn't a readout, it's a request. The
+next idea is to grow that into a small closed loop of its own: **perceive → decide → act**, with a
+persistent personality that colors every step, so two Creature nodes wired to the same signal don't
+necessarily behave the same way.
 
 <p align="center">
   <img src="docs/readme-assets/agentic-loop.svg" alt="Perceive, decide, act loop, biased by persistent personality traits like Resilience, Curiosity, and Volatility Tolerance" width="820" />
@@ -153,9 +157,9 @@ signal don't necessarily behave the same way.
   parameters. An agentic version could let the existing slow ~10-second baseline become the
   setpoint over a whole session, so a Creature fed quiet textures for an hour starts treating that
   as normal instead of forever comparing itself to a hardcoded number.
-- **Acting back, not just reporting.** The real "agentic" step: an output that reaches back into
-  the patch instead of only describing itself outward — a small nudge to its own sensitivity, a
-  request-for-attention pulse when neglected, something shaped like an action rather than a readout.
+- **Acting back, not just reporting.** ✅ *First step implemented* — `Ear Protect`. Still open: a
+  small nudge to its own sensitivity, a request-for-attention pulse when neglected, more of
+  something shaped like an action rather than a readout.
 - **Scarring, not just state.** Health already tracks the real stakes. A close call with death could
   leave a small permanent trait shift behind — more cautious afterward — rather than resetting
   cleanly the moment it recovers. History that outlives the event that caused it.

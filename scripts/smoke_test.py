@@ -17176,6 +17176,7 @@ def require_native_module_contract(base_url: str) -> None:
             "soemdsp_creature_health",
             "soemdsp_creature_mood",
             "soemdsp_creature_alive",
+            "soemdsp_creature_ear_protect",
             "soemdsp_creature_metadata_json",
         ],
         "ellipsoid": ["soemdsp_ellipsoid_sample", "soemdsp_ellipsoid_vector_sample"],

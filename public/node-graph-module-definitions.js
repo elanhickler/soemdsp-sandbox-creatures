@@ -1599,9 +1599,10 @@ const nodeGraphModuleDefinitions = Object.freeze({
       { key: "Health", kind: "scalar" },
       { key: "Mood", kind: "scalar" },
       { key: "Alive", kind: "scalar" },
+      { key: "Ear Protect", kind: "scalar" },
     ],
     inputs: ["In"],
-    outputs: ["Hunger", "Health", "Mood", "Alive"],
+    outputs: ["Hunger", "Health", "Mood", "Alive", "Ear Protect"],
     parameters: [
       {
         defaultValue: "-24",

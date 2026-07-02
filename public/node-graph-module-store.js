@@ -820,9 +820,9 @@ const nodeGraphModuleStoreCatalog = Object.freeze({
   },
   creature: {
     category: "Creatures",
-    description: "An electrified virtual pet that lives on the loudness of whatever signal you feed it. Tracks Hunger and Health independently, and picks one of eight moods (Peaceful, Sad, Happy, Excited, Hungry, Angry, Fear, Meltdown) from how the signal behaves: steady and in-range is Happy, quiet-but-stable is Peaceful, feast-or-famine loudness is Hungry, sustained near-clip is Angry, a spike over the top is Fear, and a harsh rail-riding near-square-wave signal is Meltdown. Neglect it long enough and it can die for real.",
+    description: "An electrified virtual pet that lives on the loudness of whatever signal you feed it. Tracks Hunger and Health independently, and picks one of eight moods (Peaceful, Sad, Happy, Excited, Hungry, Angry, Fear, Meltdown) from how the signal behaves: steady and in-range is Happy, quiet-but-stable is Peaceful, feast-or-famine loudness is Hungry, sustained near-clip is Angry, a spike over the top is Fear, and a harsh rail-riding near-square-wave signal is Meltdown. Neglect it long enough and it can die for real. A Meltdown also engages Ear Protect, a real gain-reduction request the creature sends back into the patch instead of just labeling its own mood.",
     label: "Creature",
-    notes: ["virtual pet", "mood", "hunger", "loudness", "RMS"],
+    notes: ["virtual pet", "mood", "hunger", "loudness", "RMS", "ear protect"],
   },
   pll: {
     category: "Sequence",

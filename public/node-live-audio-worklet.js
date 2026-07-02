@@ -480,7 +480,8 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
           this.nativeCreature?.soemdsp_creature_hunger &&
           this.nativeCreature?.soemdsp_creature_health &&
           this.nativeCreature?.soemdsp_creature_mood &&
-          this.nativeCreature?.soemdsp_creature_alive,
+          this.nativeCreature?.soemdsp_creature_alive &&
+          this.nativeCreature?.soemdsp_creature_ear_protect,
         );
         this.port.postMessage({
           type: "nativeModuleStatus",
@@ -4933,7 +4934,7 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
   // design; this is glue plus an idle fallback for when the WASM hasn't
   // loaded yet, not a parallel reimplementation.
   creatureSample(state, input, params, rateHz = sampleRate) {
-    const idle = { Hunger: 30, Health: 100, Mood: 0, Alive: 1 };
+    const idle = { Hunger: 30, Health: 100, Mood: 0, Alive: 1, "Ear Protect": 0 };
     const native = this.nativeCreature;
     if (!this.nativeCreatureReady || !native?.soemdsp_creature_create || !native?.soemdsp_creature_process) {
       return idle;
@@ -4960,6 +4961,7 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
         Health: this.safeFilterNumber(native.soemdsp_creature_health?.(state.nativeHandle), null),
         Mood: this.safeFilterNumber(native.soemdsp_creature_mood?.(state.nativeHandle), null),
         Alive: this.safeFilterNumber(native.soemdsp_creature_alive?.(state.nativeHandle), null),
+        "Ear Protect": this.safeFilterNumber(native.soemdsp_creature_ear_protect?.(state.nativeHandle), null),
       };
     } catch (error) {
       this.nativeCreatureReady = false;
