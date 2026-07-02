@@ -74,6 +74,41 @@ like — click through to play:
 - [`vocal-feedback.mp3`](docs/readme-assets/vocal-feedback.mp3)
 - [`cute_robot.mp3`](docs/readme-assets/cute_robot.mp3)
 
+## Generative ambient soundscape
+
+Another idea on the table: a generative ambient layer for a spacey, electric world the Creature
+could live in — not a fixed loop, but a small algorithmic ecosystem that the Creature's own mood
+conducts.
+
+<p align="center">
+  <img src="docs/readme-assets/ambient-engine.svg" alt="Generative ambient engine: mood conducts four independently-cycling layers -- drone bed, space field, electric sparks, harmonic drift" width="820" />
+</p>
+
+The core idea in generative ambient work is to never let anything loop exactly — instead, run
+several independent, slowly-cycling processes at once and let their combination drift out of phase
+with itself indefinitely. A few concrete directions:
+
+- **Drone bed** — a handful of detuned oscillators whose root note takes a slow random walk,
+  constrained to a fixed scale so it always sounds intentional rather than random. `fractal_brownian_noise`
+  and the existing oscillator modules in this sandbox are a natural fit for the walk itself.
+- **Space field** — filtered noise and long cross-feedback reverb tails (`sabrina_reverb` already
+  in this repo) for the "vast, cold, far away" feeling — mostly texture, rarely a distinct note.
+- **Electric sparks** — sparse transient bursts on a Poisson-style random timer (rare, unevenly
+  spaced events, not a steady pulse), using crackle/ring-modulation textures. Density and harshness
+  scale with how "hot" the Creature's mood is running.
+- **Harmonic drift** — a second, independent weighted random walk over scale degrees, cycling on a
+  totally different period than the drone bed's walk, so the two only rarely line up.
+- **Mood as conductor** — rather than hand-tuning a mix, map the Creature's own Hunger/Health/Mood
+  outputs onto these layers' parameters directly: Peaceful thins everything out to near-silence and
+  slows every LFO down; Angry/Fear pushes density and dissonance up; Meltdown could patch the
+  electric-sparks layer through a bitcrusher and let it briefly dominate. The mood system already
+  built for this module is, conveniently, already a mood *for* something — it's just never had a
+  voice yet.
+- **Silence as an instrument** — treat rests and near-silence as compositional choices, not gaps to
+  fill. Ambient work reads as alive specifically because it isn't always doing something.
+
+None of this is implemented yet — it's a direction, not a spec.
+
 ## Status
 
 Work in progress. The core module, mood logic, and both the offline and realtime signal paths are
