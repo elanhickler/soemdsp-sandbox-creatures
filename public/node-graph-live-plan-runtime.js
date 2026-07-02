@@ -263,6 +263,7 @@ function createNodeGraphLiveRuntime(plan) {
   const randomClockStates = new Map();
   const randomWalkStates = new Map();
   const reverbEffectStates = new Map();
+  const creatureStates = new Map();
   const pllStates = new Map();
   const helmholtzStates = new Map();
   const sampleHoldStates = new Map();
@@ -339,6 +340,9 @@ function createNodeGraphLiveRuntime(plan) {
     }
     if (node.type === "reverbEffect") {
       reverbEffectStates.set(node.id, createNodeGraphSabrinaReverbState());
+    }
+    if (node.type === "creature") {
+      creatureStates.set(node.id, createNodeGraphCreatureState());
     }
     if (node.type === "pll") {
       pllStates.set(node.id, createNodeGraphPllState());
@@ -466,6 +470,7 @@ function createNodeGraphLiveRuntime(plan) {
     pluckEnvelopeStates,
     randomClockStates,
     reverbEffectStates,
+    creatureStates,
     pllStates,
     helmholtzStates,
     order: [...(plan.order || [])],
@@ -600,6 +605,9 @@ function updateNodeGraphLiveRuntimePlan(runtime, plan) {
   if (!runtime.reverbEffectStates) {
     runtime.reverbEffectStates = new Map();
   }
+  if (!runtime.creatureStates) {
+    runtime.creatureStates = new Map();
+  }
   if (!runtime.pllStates) {
     runtime.pllStates = new Map();
   }
@@ -721,6 +729,9 @@ function updateNodeGraphLiveRuntimePlan(runtime, plan) {
     }
     if (node.type === "reverbEffect" && !runtime.reverbEffectStates.has(node.id)) {
       runtime.reverbEffectStates.set(node.id, createNodeGraphSabrinaReverbState());
+    }
+    if (node.type === "creature" && !runtime.creatureStates.has(node.id)) {
+      runtime.creatureStates.set(node.id, createNodeGraphCreatureState());
     }
     if (node.type === "pll" && !runtime.pllStates.has(node.id)) {
       runtime.pllStates.set(node.id, createNodeGraphPllState());
@@ -946,6 +957,11 @@ function updateNodeGraphLiveRuntimePlan(runtime, plan) {
   for (const id of [...runtime.reverbEffectStates.keys()]) {
     if (!nodeIds.has(id)) {
       runtime.reverbEffectStates.delete(id);
+    }
+  }
+  for (const id of [...runtime.creatureStates.keys()]) {
+    if (!nodeIds.has(id)) {
+      runtime.creatureStates.delete(id);
     }
   }
   for (const id of [...(runtime.pllStates?.keys() || [])]) {

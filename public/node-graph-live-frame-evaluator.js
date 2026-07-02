@@ -216,6 +216,10 @@ function createNodeGraphSabrinaReverbState() {
   };
 }
 
+function createNodeGraphCreatureState() {
+  return { nativeHandle: 0, nativeSampleRate: 0 };
+}
+
 function createNodeGraphPllState() {
   return { nativeHandle: 0, nativeParamKey: "", nativeSampleRate: 0 };
 }
@@ -1234,6 +1238,50 @@ function nodeGraphSabrinaReverbSample(state, leftInput, rightInput, params, samp
     state.nativeHandle = 0;
     state.nativeParamKey = "";
     return dry;
+  }
+}
+
+function nodeGraphCreatureSample(state, input, params, sampleRate, runtime = null, nodeId = "") {
+  // All of the creature's actual behavior lives in the C++/WASM module by
+  // design -- this is just the offline-evaluator glue plus an idle fallback
+  // for when the WASM hasn't loaded yet, not a parallel reimplementation.
+  const idle = { Hunger: 30, Health: 100, Mood: 0, Alive: 1 };
+  const native = runtime?.nativeCreatureReady ? runtime?.nativeCreature : null;
+  if (!native?.soemdsp_creature_create || !native?.soemdsp_creature_process) {
+    return idle;
+  }
+  try {
+    const safeRate = Math.max(1, Math.round(Number(sampleRate) || 44100));
+    if (!state.nativeHandle || state.nativeSampleRate !== safeRate) {
+      if (state.nativeHandle && native.soemdsp_creature_destroy) {
+        native.soemdsp_creature_destroy(state.nativeHandle);
+      }
+      state.nativeHandle = native.soemdsp_creature_create() || 0;
+      state.nativeSampleRate = safeRate;
+    }
+    if (!state.nativeHandle) {
+      return idle;
+    }
+    const safeInput = nodeGraphSafeFilterNumber(input, runtime, nodeId, null, "Creature input");
+    const comfortLow = nodeGraphSafeFilterNumber(params.comfortLow, runtime, nodeId, null, "Creature comfort low");
+    const comfortHigh = nodeGraphSafeFilterNumber(params.comfortHigh, runtime, nodeId, null, "Creature comfort high");
+    const sensitivity = Math.max(0.05, Math.min(1, nodeGraphSafeFilterNumber(params.sensitivity, runtime, nodeId, null, "Creature sensitivity")));
+    native.soemdsp_creature_process(state.nativeHandle, safeInput, comfortLow, comfortHigh, sensitivity, safeRate);
+    return {
+      Hunger: nodeGraphSafeFilterNumber(native.soemdsp_creature_hunger?.(state.nativeHandle), runtime, nodeId, null, "Creature hunger"),
+      Health: nodeGraphSafeFilterNumber(native.soemdsp_creature_health?.(state.nativeHandle), runtime, nodeId, null, "Creature health"),
+      Mood: nodeGraphSafeFilterNumber(native.soemdsp_creature_mood?.(state.nativeHandle), runtime, nodeId, null, "Creature mood"),
+      Alive: nodeGraphSafeFilterNumber(native.soemdsp_creature_alive?.(state.nativeHandle), runtime, nodeId, null, "Creature alive"),
+    };
+  } catch (error) {
+    if (runtime) {
+      runtime.nativeCreatureReady = false;
+    }
+    if (state.nativeHandle && native.soemdsp_creature_destroy) {
+      native.soemdsp_creature_destroy(state.nativeHandle);
+    }
+    state.nativeHandle = 0;
+    return idle;
   }
 }
 
@@ -3241,6 +3289,22 @@ function evaluateNodeGraphPlanFrame(runtime, sampleRate, frame, frames) {
           mix: read("mix", 0.43),
           recycle: read("recycle", 0.70),
           seed: read("seed", 0),
+        },
+        sampleRate,
+        runtime,
+        nodeId,
+      );
+    } else if (node?.type === "creature") {
+      const state = runtime.creatureStates.get(nodeId) || createNodeGraphCreatureState();
+      runtime.creatureStates.set(nodeId, state);
+      const read = (key, fallback) => readNodeGraphLiveEffectiveParam(runtime, node, key, fallback, frame, frames, frameValues);
+      value = nodeGraphCreatureSample(
+        state,
+        mixInput(nodeId),
+        {
+          comfortLow: read("comfortLow", -24),
+          comfortHigh: read("comfortHigh", -3),
+          sensitivity: read("sensitivity", 0.5),
         },
         sampleRate,
         runtime,

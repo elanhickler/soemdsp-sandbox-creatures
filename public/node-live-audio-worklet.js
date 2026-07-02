@@ -127,6 +127,8 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     this.nativeEllipsoidReady = false;
     this.nativeSabrinaReverb = null;
     this.nativeSabrinaReverbReady = false;
+    this.nativeCreature = null;
+    this.nativeCreatureReady = false;
     this.nativePll = null;
     this.nativePllReady = false;
     this.nativeHelmholtz = null;
@@ -179,6 +181,7 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     this.planSerial = 0;
     this.randomClockStates = new Map();
     this.reverbEffectStates = new Map();
+    this.creatureStates = new Map();
     this.sampleHoldStates = new Map();
     this.samplePlaybackStates = new Map();
     this.samples = new Map();
@@ -320,6 +323,14 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     state.nativeHandle = 0;
   }
 
+  destroyCreatureState(state) {
+    if (!state?.nativeHandle || !this.nativeCreature?.soemdsp_creature_destroy) {
+      return;
+    }
+    this.nativeCreature.soemdsp_creature_destroy(state.nativeHandle);
+    state.nativeHandle = 0;
+  }
+
   handleMessage(message) {
     if (message.type === "stop") {
       if (message.sessionId !== this.sessionId || message.planSerial !== this.planSerial) {
@@ -455,6 +466,26 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
           type: "nativeModuleStatus",
           name: "sabrina_reverb",
           status: this.nativeSabrinaReverbReady ? "ready" : "missing exports",
+        });
+        return;
+      }
+      if (name === "creature" || targetType === "creature") {
+        for (const state of this.creatureStates.values()) {
+          this.destroyCreatureState(state);
+        }
+        this.nativeCreature = exports;
+        this.nativeCreatureReady = Boolean(
+          this.nativeCreature?.soemdsp_creature_create &&
+          this.nativeCreature?.soemdsp_creature_process &&
+          this.nativeCreature?.soemdsp_creature_hunger &&
+          this.nativeCreature?.soemdsp_creature_health &&
+          this.nativeCreature?.soemdsp_creature_mood &&
+          this.nativeCreature?.soemdsp_creature_alive,
+        );
+        this.port.postMessage({
+          type: "nativeModuleStatus",
+          name: "creature",
+          status: this.nativeCreatureReady ? "ready" : "missing exports",
         });
         return;
       }
@@ -763,6 +794,10 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
       this.destroySabrinaReverbState(state);
     }
     this.reverbEffectStates = new Map();
+    for (const state of this.creatureStates.values()) {
+      this.destroyCreatureState(state);
+    }
+    this.creatureStates = new Map();
     for (const state of this.pllStates.values()) {
       this.destroyPllState(state);
     }
@@ -1027,6 +1062,9 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
       if (node?.type === "reverbEffect" && !this.reverbEffectStates.has(id)) {
         this.reverbEffectStates.set(id, this.createSabrinaReverbState());
       }
+      if (node?.type === "creature" && !this.creatureStates.has(id)) {
+        this.creatureStates.set(id, this.createCreatureState());
+      }
       if (node?.type === "pll" && !this.pllStates.has(id)) {
         this.pllStates.set(id, this.createPllState());
       }
@@ -1251,6 +1289,12 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
       if (!ids.has(id)) {
         this.destroySabrinaReverbState(this.reverbEffectStates.get(id));
         this.reverbEffectStates.delete(id);
+      }
+    }
+    for (const id of [...this.creatureStates.keys()]) {
+      if (!ids.has(id)) {
+        this.destroyCreatureState(this.creatureStates.get(id));
+        this.creatureStates.delete(id);
       }
     }
     for (const id of [...this.pllStates.keys()]) {
@@ -3598,6 +3642,8 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     runtime.nativeEllipsoidReady = this.nativeEllipsoidReady;
     runtime.nativeSabrinaReverb = this.nativeSabrinaReverb;
     runtime.nativeSabrinaReverbReady = this.nativeSabrinaReverbReady;
+    runtime.nativeCreature = this.nativeCreature;
+    runtime.nativeCreatureReady = this.nativeCreatureReady;
     runtime.nativePll = this.nativePll;
     runtime.nativePllReady = this.nativePllReady;
     runtime.nativeHelmholtz = this.nativeHelmholtz;
@@ -3632,6 +3678,7 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     runtime.planSerial = 0;
     runtime.randomClockStates = new Map();
     runtime.reverbEffectStates = new Map();
+    runtime.creatureStates = new Map();
     runtime.sampleHoldStates = new Map();
     runtime.samplePlaybackStates = new Map();
     runtime.samples = this.samples;
@@ -3707,6 +3754,7 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
       if (node?.type === "delayedTrigger") this.delayedTriggerStates.set(id, this.createDelayedTriggerState());
       if (node?.type === "delayEffect") this.delayEffectStates.set(id, this.createDelayEffectState());
       if (node?.type === "reverbEffect") this.reverbEffectStates.set(id, this.createSabrinaReverbState());
+      if (node?.type === "creature") this.creatureStates.set(id, this.createCreatureState());
       if (node?.type === "pll") this.pllStates.set(id, this.createPllState());
       if (node?.type === "helmholtzPitch") this.helmholtzStates.set(id, this.createHelmholtzState());
       if (node?.type === "randomClock") this.randomClockStates.set(id, this.createRandomClockState());
@@ -4624,6 +4672,10 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     };
   }
 
+  createCreatureState() {
+    return { nativeHandle: 0, nativeSampleRate: 0 };
+  }
+
   createPllState() {
     return { nativeHandle: 0, nativeParamKey: "", nativeSampleRate: 0 };
   }
@@ -4875,6 +4927,54 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
       return nativeOutput;
     }
     return { "Left Dry": dryLeft, "Mono Dry": dryMono, "Right Dry": dryRight, "Left Mix": dryLeft, "Mono Mix": dryMono, "Right Mix": dryRight };
+  }
+
+  // Everything the creature actually does lives in the C++/WASM module by
+  // design; this is glue plus an idle fallback for when the WASM hasn't
+  // loaded yet, not a parallel reimplementation.
+  creatureSample(state, input, params, rateHz = sampleRate) {
+    const idle = { Hunger: 30, Health: 100, Mood: 0, Alive: 1 };
+    const native = this.nativeCreature;
+    if (!this.nativeCreatureReady || !native?.soemdsp_creature_create || !native?.soemdsp_creature_process) {
+      return idle;
+    }
+    try {
+      const safeRate = Math.max(1, Number(rateHz) || sampleRate || 44100);
+      if (!state.nativeHandle || state.nativeSampleRate !== safeRate) {
+        if (state.nativeHandle && native.soemdsp_creature_destroy) {
+          native.soemdsp_creature_destroy(state.nativeHandle);
+        }
+        state.nativeHandle = native.soemdsp_creature_create() || 0;
+        state.nativeSampleRate = safeRate;
+      }
+      if (!state.nativeHandle) {
+        return idle;
+      }
+      const safeInput = this.safeFilterNumber(input, null);
+      const comfortLow = this.safeFilterNumber(params.comfortLow, null);
+      const comfortHigh = this.safeFilterNumber(params.comfortHigh, null);
+      const sensitivity = this.clampValue(this.safeFilterNumber(params.sensitivity, null), 0.05, 1);
+      native.soemdsp_creature_process(state.nativeHandle, safeInput, comfortLow, comfortHigh, sensitivity, safeRate);
+      return {
+        Hunger: this.safeFilterNumber(native.soemdsp_creature_hunger?.(state.nativeHandle), null),
+        Health: this.safeFilterNumber(native.soemdsp_creature_health?.(state.nativeHandle), null),
+        Mood: this.safeFilterNumber(native.soemdsp_creature_mood?.(state.nativeHandle), null),
+        Alive: this.safeFilterNumber(native.soemdsp_creature_alive?.(state.nativeHandle), null),
+      };
+    } catch (error) {
+      this.nativeCreatureReady = false;
+      if (state.nativeHandle && native.soemdsp_creature_destroy) {
+        native.soemdsp_creature_destroy(state.nativeHandle);
+      }
+      state.nativeHandle = 0;
+      this.port.postMessage({
+        type: "nativeModuleStatus",
+        name: "creature",
+        status: "disabled",
+        message: String(error?.message || error || "native Creature failed"),
+      });
+      return idle;
+    }
   }
 
   sampleHoldSample(state, input, trigger, threshold, sampleFrequency, sampleRate, hasInConnected, nodeId) {
@@ -7231,6 +7331,20 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
           },
           safeRate,
           frame,
+        );
+      } else if (node?.type === "creature") {
+        const state = this.creatureStates.get(nodeId) || this.createCreatureState();
+        this.creatureStates.set(nodeId, state);
+        const read = (key, fallback) => this.readEffectiveParameter(node, key, fallback, frame, frames, frameValues);
+        value = this.creatureSample(
+          state,
+          mixInput(nodeId),
+          {
+            comfortLow: read("comfortLow", -24),
+            comfortHigh: read("comfortHigh", -3),
+            sensitivity: read("sensitivity", 0.5),
+          },
+          safeRate,
         );
       } else if (node?.type === "pll") {
         const state = this.pllStates.get(nodeId) || this.createPllState();

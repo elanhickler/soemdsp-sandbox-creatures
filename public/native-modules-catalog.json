@@ -13,6 +13,17 @@
       "wasmAvailable": true
     },
     {
+      "name": "creature",
+      "label": "Creature",
+      "targetType": "creature",
+      "kind": "life",
+      "source": "native_modules/creature/creature.cpp",
+      "sourceUrl": "https://github.com/soundemote/soemdsp-sandbox/blob/master/native_modules/creature/creature.cpp",
+      "wasm": "native_modules/creature/creature.wasm",
+      "wasmUrl": "native_modules/creature/creature.wasm",
+      "wasmAvailable": true
+    },
+    {
       "name": "ellipsoid",
       "label": "Ellipsoid",
       "targetType": "ellipsoid",

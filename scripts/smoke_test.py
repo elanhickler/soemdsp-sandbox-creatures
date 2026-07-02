@@ -12734,7 +12734,7 @@ def require_node_graph_mvp_contract() -> None:
     require("const workingCount = entries.filter((entry) => entry.visible && entry.implemented).length" in module_store_source, "module browser counts should include only working modules")
     require('if (value === "Sequencer")' in module_store_source and 'return "Sequence";' in module_store_source, "old Sequencer state should normalize to Sequence")
     require('"Oscilloscope",' in module_store_source, "Module Browser should expose an Oscilloscope category")
-    require('departments: Object.freeze(["Controllers", "Game Triggers", "Portals", "Oscilloscope", "Visual", "Debug"])' in module_store_source, "Oscilloscope and Game Triggers categories should live under Interact")
+    require('departments: Object.freeze(["Controllers", "Game Triggers", "Portals", "Oscilloscope", "Visual", "Creatures", "Debug"])' in module_store_source, "Oscilloscope and Game Triggers categories should live under Interact")
     require('"Game Triggers",' in module_store_source and '"wireBreak"' in module_store_source and '"wireConnect"' in module_store_source and '"wireDisconnect"' in module_store_source and '"windowReopen"' in module_store_source and '"shootingStarTail"' in module_store_source and '"shootingStarExplosion"' in module_store_source, "Game Triggers should expose wire, window, and shooting star trigger modules")
     wire_connect_definition = module_definitions_source[
         module_definitions_source.index("wireConnect: {"):
@@ -17168,6 +17168,16 @@ def require_native_module_contract(base_url: str) -> None:
 
     expected_native_exports = {
         "chua_attractor": ["soemdsp_chua_attractor_create", "soemdsp_chua_attractor_destroy", "soemdsp_chua_attractor_sample"],
+        "creature": [
+            "soemdsp_creature_create",
+            "soemdsp_creature_destroy",
+            "soemdsp_creature_process",
+            "soemdsp_creature_hunger",
+            "soemdsp_creature_health",
+            "soemdsp_creature_mood",
+            "soemdsp_creature_alive",
+            "soemdsp_creature_metadata_json",
+        ],
         "ellipsoid": ["soemdsp_ellipsoid_sample", "soemdsp_ellipsoid_vector_sample"],
         "fractal_brownian_noise": ["soemdsp_fbm_create", "soemdsp_fbm_destroy", "soemdsp_fbm_sample"],
         "henon_map": ["soemdsp_henon_map_create", "soemdsp_henon_map_destroy", "soemdsp_henon_map_sample"],

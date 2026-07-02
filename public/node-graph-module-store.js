@@ -88,6 +88,7 @@ const nodeGraphModuleStoreTypes = Object.freeze([
   "slewLimiter",
   "delayEffect",
   "reverbEffect",
+  "creature",
   "pll",
   "helmholtzPitch",
   "distortionEffect",
@@ -159,6 +160,7 @@ const nodeGraphModuleStoreDepartments = Object.freeze([
   "Portals",
   "Loops",
   "Samples",
+  "Creatures",
   "Debug",
 ]);
 
@@ -177,7 +179,7 @@ const nodeGraphModuleStoreVisualGroups = Object.freeze([
   },
   {
     label: "Interact",
-    departments: Object.freeze(["Controllers", "Game Triggers", "Portals", "Oscilloscope", "Visual", "Debug"]),
+    departments: Object.freeze(["Controllers", "Game Triggers", "Portals", "Oscilloscope", "Visual", "Creatures", "Debug"]),
   },
 ]);
 
@@ -815,6 +817,12 @@ const nodeGraphModuleStoreCatalog = Object.freeze({
     description: "Raw Sabrina reverb port: serial diffusion stages with cross-feedback delay, modulation, recycle, and wet/dry mix. Seed randomizes the delay line pattern.",
     label: "Sabrina Reverb",
     notes: ["Sabrina", "serial diffusion", "cross feedback", "seed"],
+  },
+  creature: {
+    category: "Creatures",
+    description: "An electrified Tamagotchi that lives on the loudness of whatever signal you feed it. Tracks Hunger and Health independently, and picks one of eight moods (Peaceful, Sad, Happy, Excited, Hungry, Angry, Fear, Meltdown) from how the signal behaves: steady and in-range is Happy, quiet-but-stable is Peaceful, feast-or-famine loudness is Hungry, sustained near-clip is Angry, a spike over the top is Fear, and a harsh rail-riding near-square-wave signal is Meltdown. Neglect it long enough and it can die for real.",
+    label: "Creature",
+    notes: ["tamagotchi", "virtual pet", "mood", "hunger", "loudness", "RMS"],
   },
   pll: {
     category: "Sequence",

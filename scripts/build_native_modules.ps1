@@ -307,3 +307,24 @@ if (!(Test-Path -LiteralPath $clang)) {
   "-Wl,--export-memory" `
   -o "$root\native_modules\chua_attractor\chua_attractor.wasm" `
   "$root\native_modules\chua_attractor\chua_attractor.cpp"
+
+& $clang `
+  --target=wasm32 `
+  -O3 `
+  -nostdlib `
+  -fno-exceptions `
+  -fno-rtti `
+  "-Wl,--no-entry" `
+  "-Wl,--export=soemdsp_creature_create" `
+  "-Wl,--export=soemdsp_creature_destroy" `
+  "-Wl,--export=soemdsp_creature_process" `
+  "-Wl,--export=soemdsp_creature_hunger" `
+  "-Wl,--export=soemdsp_creature_health" `
+  "-Wl,--export=soemdsp_creature_mood" `
+  "-Wl,--export=soemdsp_creature_alive" `
+  "-Wl,--export=soemdsp_creature_version" `
+  "-Wl,--export=soemdsp_creature_metadata_json" `
+  "-Wl,--export=soemdsp_creature_metadata_json_size" `
+  "-Wl,--export-memory" `
+  -o "$root\native_modules\creature\creature.wasm" `
+  "$root\native_modules\creature\creature.cpp"

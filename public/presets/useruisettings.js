@@ -263,6 +263,18 @@
         "developer": true,
         "home": false
       },
+      "chordMemory": {
+        "developer": true,
+        "home": false
+      },
+      "turingMachine": {
+        "developer": true,
+        "home": false
+      },
+      "pitchQuantizer": {
+        "developer": true,
+        "home": false
+      },
       "arpeggiator": {
         "developer": true,
         "home": false
@@ -271,7 +283,47 @@
         "developer": true,
         "home": false
       },
+      "blubb": {
+        "developer": true,
+        "home": false
+      },
+      "boing": {
+        "developer": true,
+        "home": false
+      },
+      "keplerBoukamp": {
+        "developer": true,
+        "home": false
+      },
+      "mushroom": {
+        "developer": true,
+        "home": false
+      },
+      "nyquistShannon": {
+        "developer": true,
+        "home": false
+      },
+      "radar": {
+        "developer": true,
+        "home": false
+      },
+      "torus": {
+        "developer": true,
+        "home": false
+      },
+      "wirdoSpiral": {
+        "developer": true,
+        "home": false
+      },
       "lorenzAttractor": {
+        "developer": true,
+        "home": false
+      },
+      "logisticMap": {
+        "developer": true,
+        "home": false
+      },
+      "henonMap": {
         "developer": true,
         "home": false
       },
@@ -340,6 +392,10 @@
         "home": false
       },
       "output": {
+        "developer": true,
+        "home": false
+      },
+      "audioInput": {
         "developer": true,
         "home": false
       },
@@ -467,7 +523,15 @@
         "developer": true,
         "home": false
       },
+      "creature": {
+        "developer": true,
+        "home": false
+      },
       "pll": {
+        "developer": true,
+        "home": false
+      },
+      "helmholtzPitch": {
         "developer": true,
         "home": false
       },
@@ -500,6 +564,10 @@
         "home": false
       },
       "vactrolEnvelope": {
+        "developer": true,
+        "home": false
+      },
+      "vactrolEnvelopeC4": {
         "developer": true,
         "home": false
       },
@@ -548,6 +616,10 @@
         "home": false
       },
       "valueOscilloscope": {
+        "developer": true,
+        "home": false
+      },
+      "numberReadout": {
         "developer": true,
         "home": false
       },
@@ -653,6 +725,7 @@
       }
     },
     "sharedInspectorActive": "",
+    "sharedInspectorWindowState": {},
     "workspaceView": {
       "pan": {
         "x": -128.64158163265304,
@@ -665,6 +738,7 @@
     "savedPatchBankName": "chaos",
     "savedPatchGridColumns": 3,
     "savedPatchExplorerView": "banks",
+    "workingPatch": null,
     "currentSavedPatchFilename": "",
     "patchDirtyState": "untouched"
   }
