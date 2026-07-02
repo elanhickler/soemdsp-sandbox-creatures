@@ -329,3 +329,24 @@ if (!(Test-Path -LiteralPath $clang)) {
   "-Wl,--export-memory" `
   -o "$root\native_modules\creature\creature.wasm" `
   "$root\native_modules\creature\creature.cpp"
+
+& $clang `
+  --target=wasm32 `
+  -O3 `
+  -nostdlib `
+  -fno-exceptions `
+  -fno-rtti `
+  "-Wl,--no-entry" `
+  "-Wl,--export=soemdsp_cellular_automaton_create" `
+  "-Wl,--export=soemdsp_cellular_automaton_destroy" `
+  "-Wl,--export=soemdsp_cellular_automaton_process" `
+  "-Wl,--export=soemdsp_cellular_automaton_density" `
+  "-Wl,--export=soemdsp_cellular_automaton_activity" `
+  "-Wl,--export=soemdsp_cellular_automaton_x" `
+  "-Wl,--export=soemdsp_cellular_automaton_y" `
+  "-Wl,--export=soemdsp_cellular_automaton_version" `
+  "-Wl,--export=soemdsp_cellular_automaton_metadata_json" `
+  "-Wl,--export=soemdsp_cellular_automaton_metadata_json_size" `
+  "-Wl,--export-memory" `
+  -o "$root\native_modules\cellular_automaton\cellular_automaton.wasm" `
+  "$root\native_modules\cellular_automaton\cellular_automaton.cpp"

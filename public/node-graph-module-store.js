@@ -89,6 +89,7 @@ const nodeGraphModuleStoreTypes = Object.freeze([
   "delayEffect",
   "reverbEffect",
   "creature",
+  "cellularAutomaton",
   "pll",
   "helmholtzPitch",
   "distortionEffect",
@@ -823,6 +824,12 @@ const nodeGraphModuleStoreCatalog = Object.freeze({
     description: "An electrified virtual pet that lives on the loudness of whatever signal you feed it. Tracks Hunger and Health independently, and picks one of eight moods (Peaceful, Sad, Happy, Excited, Hungry, Angry, Fear, Meltdown) from how the signal behaves: steady and in-range is Happy, quiet-but-stable is Peaceful, feast-or-famine loudness is Hungry, sustained near-clip is Angry, a spike over the top is Fear, and a harsh rail-riding near-square-wave signal is Meltdown. Neglect it long enough and it can die for real. A Meltdown also engages Ear Protect, a real gain-reduction request the creature sends back into the patch instead of just labeling its own mood.",
     label: "Creature",
     notes: ["virtual pet", "mood", "hunger", "loudness", "RMS", "ear protect"],
+  },
+  cellularAutomaton: {
+    category: "Creatures",
+    description: "A tiny life-form whose whole body is a 1D elementary cellular automaton: a row of 32 cells, each alive or dead, where every next generation is computed purely from each cell and its two neighbors under a fixed rule (0-255). Density and Activity are useful modulation signals on their own; X/Y scan out a scrolling spacetime history window so the built-in scope display paints the classic evolving pattern with no extra rendering code. Reset reseeds the starting row; the same seed always regrows the same life.",
+    label: "Cellular Automaton",
+    notes: ["cellular automaton", "life", "rule 30", "spacetime diagram", "deterministic"],
   },
   pll: {
     category: "Sequence",

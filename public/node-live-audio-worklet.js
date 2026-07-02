@@ -129,6 +129,8 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     this.nativeSabrinaReverbReady = false;
     this.nativeCreature = null;
     this.nativeCreatureReady = false;
+    this.nativeCellularAutomaton = null;
+    this.nativeCellularAutomatonReady = false;
     this.nativePll = null;
     this.nativePllReady = false;
     this.nativeHelmholtz = null;
@@ -182,6 +184,7 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     this.randomClockStates = new Map();
     this.reverbEffectStates = new Map();
     this.creatureStates = new Map();
+    this.cellularAutomatonStates = new Map();
     this.sampleHoldStates = new Map();
     this.samplePlaybackStates = new Map();
     this.samples = new Map();
@@ -328,6 +331,14 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
       return;
     }
     this.nativeCreature.soemdsp_creature_destroy(state.nativeHandle);
+    state.nativeHandle = 0;
+  }
+
+  destroyCellularAutomatonState(state) {
+    if (!state?.nativeHandle || !this.nativeCellularAutomaton?.soemdsp_cellular_automaton_destroy) {
+      return;
+    }
+    this.nativeCellularAutomaton.soemdsp_cellular_automaton_destroy(state.nativeHandle);
     state.nativeHandle = 0;
   }
 
@@ -487,6 +498,26 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
           type: "nativeModuleStatus",
           name: "creature",
           status: this.nativeCreatureReady ? "ready" : "missing exports",
+        });
+        return;
+      }
+      if (name === "cellular_automaton" || targetType === "cellularAutomaton") {
+        for (const state of this.cellularAutomatonStates.values()) {
+          this.destroyCellularAutomatonState(state);
+        }
+        this.nativeCellularAutomaton = exports;
+        this.nativeCellularAutomatonReady = Boolean(
+          this.nativeCellularAutomaton?.soemdsp_cellular_automaton_create &&
+          this.nativeCellularAutomaton?.soemdsp_cellular_automaton_process &&
+          this.nativeCellularAutomaton?.soemdsp_cellular_automaton_density &&
+          this.nativeCellularAutomaton?.soemdsp_cellular_automaton_activity &&
+          this.nativeCellularAutomaton?.soemdsp_cellular_automaton_x &&
+          this.nativeCellularAutomaton?.soemdsp_cellular_automaton_y,
+        );
+        this.port.postMessage({
+          type: "nativeModuleStatus",
+          name: "cellular_automaton",
+          status: this.nativeCellularAutomatonReady ? "ready" : "missing exports",
         });
         return;
       }
@@ -799,6 +830,10 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
       this.destroyCreatureState(state);
     }
     this.creatureStates = new Map();
+    for (const state of this.cellularAutomatonStates.values()) {
+      this.destroyCellularAutomatonState(state);
+    }
+    this.cellularAutomatonStates = new Map();
     for (const state of this.pllStates.values()) {
       this.destroyPllState(state);
     }
@@ -1066,6 +1101,9 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
       if (node?.type === "creature" && !this.creatureStates.has(id)) {
         this.creatureStates.set(id, this.createCreatureState());
       }
+      if (node?.type === "cellularAutomaton" && !this.cellularAutomatonStates.has(id)) {
+        this.cellularAutomatonStates.set(id, this.createCellularAutomatonState());
+      }
       if (node?.type === "pll" && !this.pllStates.has(id)) {
         this.pllStates.set(id, this.createPllState());
       }
@@ -1296,6 +1334,12 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
       if (!ids.has(id)) {
         this.destroyCreatureState(this.creatureStates.get(id));
         this.creatureStates.delete(id);
+      }
+    }
+    for (const id of [...this.cellularAutomatonStates.keys()]) {
+      if (!ids.has(id)) {
+        this.destroyCellularAutomatonState(this.cellularAutomatonStates.get(id));
+        this.cellularAutomatonStates.delete(id);
       }
     }
     for (const id of [...this.pllStates.keys()]) {
@@ -3645,6 +3689,8 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     runtime.nativeSabrinaReverbReady = this.nativeSabrinaReverbReady;
     runtime.nativeCreature = this.nativeCreature;
     runtime.nativeCreatureReady = this.nativeCreatureReady;
+    runtime.nativeCellularAutomaton = this.nativeCellularAutomaton;
+    runtime.nativeCellularAutomatonReady = this.nativeCellularAutomatonReady;
     runtime.nativePll = this.nativePll;
     runtime.nativePllReady = this.nativePllReady;
     runtime.nativeHelmholtz = this.nativeHelmholtz;
@@ -3680,6 +3726,7 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     runtime.randomClockStates = new Map();
     runtime.reverbEffectStates = new Map();
     runtime.creatureStates = new Map();
+    runtime.cellularAutomatonStates = new Map();
     runtime.sampleHoldStates = new Map();
     runtime.samplePlaybackStates = new Map();
     runtime.samples = this.samples;
@@ -3756,6 +3803,7 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
       if (node?.type === "delayEffect") this.delayEffectStates.set(id, this.createDelayEffectState());
       if (node?.type === "reverbEffect") this.reverbEffectStates.set(id, this.createSabrinaReverbState());
       if (node?.type === "creature") this.creatureStates.set(id, this.createCreatureState());
+      if (node?.type === "cellularAutomaton") this.cellularAutomatonStates.set(id, this.createCellularAutomatonState());
       if (node?.type === "pll") this.pllStates.set(id, this.createPllState());
       if (node?.type === "helmholtzPitch") this.helmholtzStates.set(id, this.createHelmholtzState());
       if (node?.type === "randomClock") this.randomClockStates.set(id, this.createRandomClockState());
@@ -4677,6 +4725,10 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
     return { nativeHandle: 0, nativeSampleRate: 0 };
   }
 
+  createCellularAutomatonState() {
+    return { nativeHandle: 0, nativeSampleRate: 0 };
+  }
+
   createPllState() {
     return { nativeHandle: 0, nativeParamKey: "", nativeSampleRate: 0 };
   }
@@ -4974,6 +5026,51 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
         name: "creature",
         status: "disabled",
         message: String(error?.message || error || "native Creature failed"),
+      });
+      return idle;
+    }
+  }
+
+  cellularAutomatonSample(state, resetSignal, params, rateHz = sampleRate) {
+    const idle = { Density: 0, Activity: 0, X: -1.2, Y: -1.2 };
+    const native = this.nativeCellularAutomaton;
+    if (!this.nativeCellularAutomatonReady || !native?.soemdsp_cellular_automaton_create || !native?.soemdsp_cellular_automaton_process) {
+      return idle;
+    }
+    try {
+      const safeRate = Math.max(1, Number(rateHz) || sampleRate || 44100);
+      if (!state.nativeHandle || state.nativeSampleRate !== safeRate) {
+        if (state.nativeHandle && native.soemdsp_cellular_automaton_destroy) {
+          native.soemdsp_cellular_automaton_destroy(state.nativeHandle);
+        }
+        state.nativeHandle = native.soemdsp_cellular_automaton_create() || 0;
+        state.nativeSampleRate = safeRate;
+      }
+      if (!state.nativeHandle) {
+        return idle;
+      }
+      const safeReset = this.safeFilterNumber(resetSignal, null);
+      const rule = this.safeFilterNumber(params.rule, null);
+      const rate = this.safeFilterNumber(params.rate, null);
+      const seed = this.safeFilterNumber(params.seed, null);
+      native.soemdsp_cellular_automaton_process(state.nativeHandle, safeReset, rule, rate, seed, safeRate);
+      return {
+        Density: this.safeFilterNumber(native.soemdsp_cellular_automaton_density?.(state.nativeHandle), null),
+        Activity: this.safeFilterNumber(native.soemdsp_cellular_automaton_activity?.(state.nativeHandle), null),
+        X: this.safeFilterNumber(native.soemdsp_cellular_automaton_x?.(state.nativeHandle), null),
+        Y: this.safeFilterNumber(native.soemdsp_cellular_automaton_y?.(state.nativeHandle), null),
+      };
+    } catch (error) {
+      this.nativeCellularAutomatonReady = false;
+      if (state.nativeHandle && native.soemdsp_cellular_automaton_destroy) {
+        native.soemdsp_cellular_automaton_destroy(state.nativeHandle);
+      }
+      state.nativeHandle = 0;
+      this.port.postMessage({
+        type: "nativeModuleStatus",
+        name: "cellular_automaton",
+        status: "disabled",
+        message: String(error?.message || error || "native Cellular Automaton failed"),
       });
       return idle;
     }
@@ -7345,6 +7442,20 @@ class NodeLiveAudioProcessor extends AudioWorkletProcessor {
             comfortLow: read("comfortLow", -24),
             comfortHigh: read("comfortHigh", -3),
             sensitivity: read("sensitivity", 0.5),
+          },
+          safeRate,
+        );
+      } else if (node?.type === "cellularAutomaton") {
+        const state = this.cellularAutomatonStates.get(nodeId) || this.createCellularAutomatonState();
+        this.cellularAutomatonStates.set(nodeId, state);
+        const read = (key, fallback) => this.readEffectiveParameter(node, key, fallback, frame, frames, frameValues);
+        value = this.cellularAutomatonSample(
+          state,
+          mixInput(nodeId, "Reset"),
+          {
+            rule: read("rule", 30),
+            rate: read("rate", 4),
+            seed: read("seed", 0),
           },
           safeRate,
         );

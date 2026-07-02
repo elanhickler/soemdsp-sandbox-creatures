@@ -2,6 +2,17 @@
   "ok": true,
   "modules": [
     {
+      "name": "cellular_automaton",
+      "label": "Cellular Automaton",
+      "targetType": "cellularAutomaton",
+      "kind": "life",
+      "source": "native_modules/cellular_automaton/cellular_automaton.cpp",
+      "sourceUrl": "https://github.com/soundemote/soemdsp-sandbox/blob/master/native_modules/cellular_automaton/cellular_automaton.cpp",
+      "wasm": "native_modules/cellular_automaton/cellular_automaton.wasm",
+      "wasmUrl": "native_modules/cellular_automaton/cellular_automaton.wasm",
+      "wasmAvailable": true
+    },
+    {
       "name": "chua_attractor",
       "label": "Chua Attractor",
       "targetType": "chuaAttractor",

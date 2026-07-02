@@ -189,19 +189,27 @@ walk, and it fits both the [Agentic personality](#agentic-personality) and
   hair and the long-term path diverges completely. A Creature's personality traits could come from
   exactly this: reproducible from a seed number, but two seeds a hair apart growing into
   noticeably different temperaments over a long session, neither one "wrong."
-- **Emergent life from simple local rules.** A different, complementary idea: a small grid where
-  each cell's next state depends only on its immediate neighbors, following a handful of fixed
-  rules — no central plan, no lookahead, just local interaction repeated many times. Behavior that
-  looks designed can emerge from rules that are almost embarrassingly simple. That's a promising
+- **Emergent life from simple local rules.** ✅ *Implemented as its own module.* `cellular_automaton`
+  is a small grid — a row of 32 cells, each alive or dead — where every next generation is computed
+  purely from each cell and its two immediate neighbors under one of 256 fixed rules. No central
+  plan, no lookahead, just local interaction repeated many times: the classic proof that behavior
+  which looks designed can emerge from rules that are almost embarrassingly simple, and a promising
   model for the mood-priority chain evolving into something with more texture over time, without
   hand-authoring every case.
-- **Chaos, kept honest.** All three of these are pure math — no randomness, no external calls, same
-  seed always produces the same output. That matches the "kept honest" requirement already set for
-  [Agentic personality](#agentic-personality): whatever ends up driving personality or mood texture
-  should stay a deterministic, inspectable function of state.
+- **Personality that hatches from a seed, not a dice roll.** Feed one of these chaotic systems a
+  starting value and its whole trajectory is fixed forever — but nudge that starting value by a
+  hair and the long-term path diverges completely. A Creature's personality traits could come from
+  exactly this: reproducible from a seed number, but two seeds a hair apart growing into
+  noticeably different temperaments over a long session, neither one "wrong."
+- **Chaos, kept honest.** All of this is pure math — no randomness, no external calls, same seed
+  always produces the same output. `cellular_automaton`'s `Density` and `Activity` outputs, plus an
+  `X`/`Y` pair that scans a scrolling spacetime history for the built-in scope display, are all
+  driven straight off that same deterministic rule table. That matches the "kept honest" requirement
+  already set for [Agentic personality](#agentic-personality): whatever ends up driving personality
+  or mood texture should stay a deterministic, inspectable function of state.
 
-Not implemented in the Creature yet — noted here because the building blocks already exist one repo
-over.
+`cellular_automaton` is a standalone module today, verified directly against the compiled `.wasm`
+via `wasmtime`; not yet wired into the Creature's own personality or mood logic.
 
 ## Status
 

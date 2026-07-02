@@ -220,6 +220,10 @@ function createNodeGraphCreatureState() {
   return { nativeHandle: 0, nativeSampleRate: 0 };
 }
 
+function createNodeGraphCellularAutomatonState() {
+  return { nativeHandle: 0, nativeSampleRate: 0 };
+}
+
 function createNodeGraphPllState() {
   return { nativeHandle: 0, nativeParamKey: "", nativeSampleRate: 0 };
 }
@@ -1280,6 +1284,50 @@ function nodeGraphCreatureSample(state, input, params, sampleRate, runtime = nul
     }
     if (state.nativeHandle && native.soemdsp_creature_destroy) {
       native.soemdsp_creature_destroy(state.nativeHandle);
+    }
+    state.nativeHandle = 0;
+    return idle;
+  }
+}
+
+function nodeGraphCellularAutomatonSample(state, resetSignal, params, sampleRate, runtime = null, nodeId = "") {
+  // All of the automaton's actual behavior lives in the C++/WASM module by
+  // design -- this is just the offline-evaluator glue plus an idle fallback
+  // for when the WASM hasn't loaded yet, not a parallel reimplementation.
+  const idle = { Density: 0, Activity: 0, X: -1.2, Y: -1.2 };
+  const native = runtime?.nativeCellularAutomatonReady ? runtime?.nativeCellularAutomaton : null;
+  if (!native?.soemdsp_cellular_automaton_create || !native?.soemdsp_cellular_automaton_process) {
+    return idle;
+  }
+  try {
+    const safeRate = Math.max(1, Math.round(Number(sampleRate) || 44100));
+    if (!state.nativeHandle || state.nativeSampleRate !== safeRate) {
+      if (state.nativeHandle && native.soemdsp_cellular_automaton_destroy) {
+        native.soemdsp_cellular_automaton_destroy(state.nativeHandle);
+      }
+      state.nativeHandle = native.soemdsp_cellular_automaton_create() || 0;
+      state.nativeSampleRate = safeRate;
+    }
+    if (!state.nativeHandle) {
+      return idle;
+    }
+    const safeReset = nodeGraphSafeFilterNumber(resetSignal, runtime, nodeId, null, "Cellular automaton reset");
+    const rule = nodeGraphSafeFilterNumber(params.rule, runtime, nodeId, null, "Cellular automaton rule");
+    const rate = nodeGraphSafeFilterNumber(params.rate, runtime, nodeId, null, "Cellular automaton rate");
+    const seed = nodeGraphSafeFilterNumber(params.seed, runtime, nodeId, null, "Cellular automaton seed");
+    native.soemdsp_cellular_automaton_process(state.nativeHandle, safeReset, rule, rate, seed, safeRate);
+    return {
+      Density: nodeGraphSafeFilterNumber(native.soemdsp_cellular_automaton_density?.(state.nativeHandle), runtime, nodeId, null, "Cellular automaton density"),
+      Activity: nodeGraphSafeFilterNumber(native.soemdsp_cellular_automaton_activity?.(state.nativeHandle), runtime, nodeId, null, "Cellular automaton activity"),
+      X: nodeGraphSafeFilterNumber(native.soemdsp_cellular_automaton_x?.(state.nativeHandle), runtime, nodeId, null, "Cellular automaton x"),
+      Y: nodeGraphSafeFilterNumber(native.soemdsp_cellular_automaton_y?.(state.nativeHandle), runtime, nodeId, null, "Cellular automaton y"),
+    };
+  } catch (error) {
+    if (runtime) {
+      runtime.nativeCellularAutomatonReady = false;
+    }
+    if (state.nativeHandle && native.soemdsp_cellular_automaton_destroy) {
+      native.soemdsp_cellular_automaton_destroy(state.nativeHandle);
     }
     state.nativeHandle = 0;
     return idle;
@@ -3306,6 +3354,22 @@ function evaluateNodeGraphPlanFrame(runtime, sampleRate, frame, frames) {
           comfortLow: read("comfortLow", -24),
           comfortHigh: read("comfortHigh", -3),
           sensitivity: read("sensitivity", 0.5),
+        },
+        sampleRate,
+        runtime,
+        nodeId,
+      );
+    } else if (node?.type === "cellularAutomaton") {
+      const state = runtime.cellularAutomatonStates.get(nodeId) || createNodeGraphCellularAutomatonState();
+      runtime.cellularAutomatonStates.set(nodeId, state);
+      const read = (key, fallback) => readNodeGraphLiveEffectiveParam(runtime, node, key, fallback, frame, frames, frameValues);
+      value = nodeGraphCellularAutomatonSample(
+        state,
+        mixInput(nodeId, "Reset"),
+        {
+          rule: read("rule", 30),
+          rate: read("rate", 4),
+          seed: read("seed", 0),
         },
         sampleRate,
         runtime,
