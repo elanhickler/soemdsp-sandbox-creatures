@@ -1,0 +1,58 @@
+<svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chaotic attractor and cellular automaton feeding a seeded personality">
+  <title>Deterministic chaos and simple local rules, both feeding a seeded personality</title>
+  <rect x="0" y="0" width="900" height="260" fill="#040709"/>
+
+  <defs>
+    <marker id="arrow4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#7fc7d9"/>
+    </marker>
+  </defs>
+
+  <!-- chaotic attractor trace -->
+  <g transform="translate(40,30)">
+    <rect x="0" y="0" width="230" height="180" rx="10" fill="#0a1113" stroke="#3de0ff" stroke-opacity="0.5" stroke-width="2"/>
+    <path d="M40 90 C 70 30, 120 30, 115 90 S 190 150, 160 90 S 90 40, 60 100 S 140 160, 175 110"
+          stroke="#3de0ff" stroke-width="1.6" fill="none" opacity="0.85"/>
+    <path d="M50 95 C 75 45, 115 45, 108 95 S 178 140, 152 95 S 95 55, 68 100 S 132 150, 165 112"
+          stroke="#3de0ff" stroke-width="1.2" fill="none" opacity="0.4"/>
+    <text x="115" y="165" font-family="monospace" font-size="12" fill="#7fc7d9" text-anchor="middle">CHAOTIC ATTRACTOR</text>
+  </g>
+
+  <!-- automaton grid, three generations -->
+  <g transform="translate(330,30)">
+    <rect x="0" y="0" width="230" height="180" rx="10" fill="#0a1113" stroke="#e2a86d" stroke-opacity="0.5" stroke-width="2"/>
+    <g transform="translate(20,20)" fill="#e2a86d">
+      <!-- gen 1 -->
+      <rect x="0" y="0" width="10" height="10" opacity="0.9"/>
+      <rect x="22" y="0" width="10" height="10" opacity="0.2"/>
+      <rect x="44" y="0" width="10" height="10" opacity="0.9"/>
+      <rect x="0" y="22" width="10" height="10" opacity="0.2"/>
+      <rect x="22" y="22" width="10" height="10" opacity="0.9"/>
+      <rect x="44" y="22" width="10" height="10" opacity="0.2"/>
+    </g>
+    <path d="M100 55 h30" stroke="#e2a86d" stroke-width="1.5" marker-end="url(#arrow4)" opacity="0.7"/>
+    <g transform="translate(140,20)" fill="#e2a86d">
+      <!-- gen 2, rule-derived -->
+      <rect x="0" y="0" width="10" height="10" opacity="0.2"/>
+      <rect x="22" y="0" width="10" height="10" opacity="0.9"/>
+      <rect x="44" y="0" width="10" height="10" opacity="0.9"/>
+      <rect x="0" y="22" width="10" height="10" opacity="0.9"/>
+      <rect x="22" y="22" width="10" height="10" opacity="0.2"/>
+      <rect x="44" y="22" width="10" height="10" opacity="0.9"/>
+    </g>
+    <text x="115" y="165" font-family="monospace" font-size="12" fill="#e2a86d" text-anchor="middle">SIMPLE LOCAL RULES</text>
+  </g>
+
+  <path d="M270 120 Q305 120 325 120" stroke="#7fc7d9" stroke-width="1.5" opacity="0.6" marker-end="url(#arrow4)"/>
+
+  <!-- feeding into personality -->
+  <g transform="translate(620,80)">
+    <rect x="0" y="0" width="240" height="70" rx="10" fill="#0a1113" stroke="#ffd166" stroke-opacity="0.6" stroke-width="2"/>
+    <text x="120" y="30" font-family="monospace" font-size="13" fill="#ffd166" text-anchor="middle" font-weight="700">SEEDED PERSONALITY</text>
+    <text x="120" y="50" font-family="monospace" font-size="10.5" fill="#7fc7d9" text-anchor="middle">reproducible, never identical</text>
+  </g>
+  <path d="M560 60 Q590 60 618 100" stroke="#7fc7d9" stroke-width="1.5" opacity="0.6" marker-end="url(#arrow4)"/>
+  <path d="M560 130 Q590 130 618 115" stroke="#7fc7d9" stroke-width="1.5" opacity="0.6" marker-end="url(#arrow4)"/>
+
+  <text x="450" y="235" font-family="monospace" font-size="12" fill="#7fc7d9" text-anchor="middle" opacity="0.65">same seed, same creature -- a different seed, a genuinely different one</text>
+</svg>

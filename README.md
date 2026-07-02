@@ -171,6 +171,38 @@ necessarily behave the same way.
 
 Not implemented yet either — it's the next direction after the ambient work above.
 
+## Ideas from chaos: life and automatons
+
+[elanhickler/soemdsp-sandbox-digital-signals-audio](https://github.com/elanhickler/soemdsp-sandbox-digital-signals-audio)
+already carries three native chaos modules worth borrowing ideas from: `logistic_map`, `henon_map`,
+and `chua_attractor` — deterministic systems, fully reproducible from a starting condition, that
+still never settle into an exact repeat. That's a different flavor of "alive" than a plain random
+walk, and it fits both the [Agentic personality](#agentic-personality) and
+[Ambient](#generative-ambient-soundscape) ideas above.
+
+<p align="center">
+  <img src="docs/readme-assets/chaos-automaton.svg" alt="A chaotic attractor trace and a simple local-rule grid, both feeding a seeded personality that is reproducible but never identical" width="820" />
+</p>
+
+- **Personality that hatches from a seed, not a dice roll.** Feed one of these chaotic systems a
+  starting value and its whole trajectory is fixed forever — but nudge that starting value by a
+  hair and the long-term path diverges completely. A Creature's personality traits could come from
+  exactly this: reproducible from a seed number, but two seeds a hair apart growing into
+  noticeably different temperaments over a long session, neither one "wrong."
+- **Emergent life from simple local rules.** A different, complementary idea: a small grid where
+  each cell's next state depends only on its immediate neighbors, following a handful of fixed
+  rules — no central plan, no lookahead, just local interaction repeated many times. Behavior that
+  looks designed can emerge from rules that are almost embarrassingly simple. That's a promising
+  model for the mood-priority chain evolving into something with more texture over time, without
+  hand-authoring every case.
+- **Chaos, kept honest.** All three of these are pure math — no randomness, no external calls, same
+  seed always produces the same output. That matches the "kept honest" requirement already set for
+  [Agentic personality](#agentic-personality): whatever ends up driving personality or mood texture
+  should stay a deterministic, inspectable function of state.
+
+Not implemented in the Creature yet — noted here because the building blocks already exist one repo
+over.
+
 ## Status
 
 Work in progress. The core module, mood logic, and both the offline and realtime signal paths are
