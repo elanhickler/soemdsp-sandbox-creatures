@@ -1,0 +1,64 @@
+<svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Signal flow through the Creature module">
+  <title>Audio signal in, three readouts out</title>
+  <rect x="0" y="0" width="900" height="260" fill="#040709"/>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#7fc7d9"/>
+    </marker>
+  </defs>
+
+  <!-- input: waveform -->
+  <g transform="translate(20,90)">
+    <rect x="0" y="0" width="150" height="80" rx="10" fill="#0a1113" stroke="#7fc7d9" stroke-opacity="0.4" stroke-width="2"/>
+    <path d="M14 40 q10 -26 20 0 t20 0 t20 0 t20 0 t20 0 t20 0" stroke="#3de0ff" stroke-width="2.5" fill="none"/>
+    <text x="75" y="70" font-family="monospace" font-size="13" fill="#7fc7d9" text-anchor="middle">AUDIO IN</text>
+  </g>
+
+  <line x1="172" y1="130" x2="222" y2="130" stroke="#7fc7d9" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- analysis box -->
+  <g transform="translate(225,60)">
+    <rect x="0" y="0" width="220" height="140" rx="10" fill="#0a1113" stroke="#3de0ff" stroke-opacity="0.55" stroke-width="2"/>
+    <text x="110" y="28" font-family="monospace" font-size="14" fill="#3de0ff" text-anchor="middle" font-weight="700">C++ / WASM</text>
+    <text x="110" y="50" font-family="monospace" font-size="11" fill="#7fc7d9" text-anchor="middle">envelope -&gt; dB</text>
+    <text x="110" y="68" font-family="monospace" font-size="11" fill="#7fc7d9" text-anchor="middle">steadiness / volatility</text>
+    <text x="110" y="86" font-family="monospace" font-size="11" fill="#7fc7d9" text-anchor="middle">clip heat / onset energy</text>
+    <text x="110" y="104" font-family="monospace" font-size="11" fill="#7fc7d9" text-anchor="middle">harshness / rail heat</text>
+    <text x="110" y="126" font-family="monospace" font-size="11" fill="#e2a86d" text-anchor="middle">priority-chain mood pick</text>
+  </g>
+
+  <line x1="447" y1="105" x2="500" y2="55" stroke="#7fc7d9" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="447" y1="130" x2="500" y2="130" stroke="#7fc7d9" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="447" y1="155" x2="500" y2="205" stroke="#7fc7d9" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- three outputs -->
+  <g transform="translate(500,20)">
+    <rect x="0" y="0" width="160" height="60" rx="8" fill="#0a1113" stroke="#3de0ff" stroke-opacity="0.5" stroke-width="2"/>
+    <text x="80" y="26" font-family="monospace" font-size="13" fill="#3de0ff" text-anchor="middle">HUNGER</text>
+    <text x="80" y="46" font-family="monospace" font-size="11" fill="#7fc7d9" text-anchor="middle">0 - 100</text>
+  </g>
+  <g transform="translate(500,100)">
+    <rect x="0" y="0" width="160" height="60" rx="8" fill="#0a1113" stroke="#7fc7d9" stroke-opacity="0.5" stroke-width="2"/>
+    <text x="80" y="26" font-family="monospace" font-size="13" fill="#7fc7d9" text-anchor="middle">HEALTH</text>
+    <text x="80" y="46" font-family="monospace" font-size="11" fill="#7fc7d9" text-anchor="middle">the real stakes</text>
+  </g>
+  <g transform="translate(500,180)">
+    <rect x="0" y="0" width="160" height="60" rx="8" fill="#0a1113" stroke="#e2a86d" stroke-opacity="0.6" stroke-width="2"/>
+    <text x="80" y="26" font-family="monospace" font-size="13" fill="#e2a86d" text-anchor="middle">MOOD</text>
+    <text x="80" y="46" font-family="monospace" font-size="11" fill="#e2a86d" text-anchor="middle">1 of 8, always</text>
+  </g>
+
+  <line x1="662" y1="50" x2="712" y2="50" stroke="#7fc7d9" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="662" y1="130" x2="712" y2="130" stroke="#7fc7d9" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="662" y1="210" x2="712" y2="210" stroke="#7fc7d9" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <g transform="translate(715,20)">
+    <rect x="0" y="0" width="165" height="220" rx="10" fill="#0a1113" stroke="#7fc7d9" stroke-opacity="0.3" stroke-width="2"/>
+    <text x="82" y="30" font-family="monospace" font-size="13" fill="#e2f6fb" text-anchor="middle">LCD READOUT</text>
+    <text x="82" y="110" font-family="monospace" font-size="11" fill="#7fc7d9" text-anchor="middle">(rest of your</text>
+    <text x="82" y="126" font-family="monospace" font-size="11" fill="#7fc7d9" text-anchor="middle">patch reacts</text>
+    <text x="82" y="142" font-family="monospace" font-size="11" fill="#7fc7d9" text-anchor="middle">to these</text>
+    <text x="82" y="158" font-family="monospace" font-size="11" fill="#7fc7d9" text-anchor="middle">3 values)</text>
+  </g>
+</svg>
