@@ -15,8 +15,9 @@
 a single question: *what would a virtual pet look like if it ate audio signal instead of food?*
 
 It's a real patchable module — not a toy bolted on the side. Wire any signal into it and the
-Creature tracks two independent stats, **Hunger** and **Health**, and settles into exactly one of
-eight moods at a time, picked by a small priority chain rather than a blended average:
+Creature tracks two independent stats, **Hunger** and **Health**, settles into exactly one of eight
+moods at a time (picked by a small priority chain rather than a blended average), and — as of
+`Ear Protect` — can act back into your patch instead of only reporting outward:
 
 <p align="center">
   <img src="docs/readme-assets/moods.svg" alt="The eight Creature moods: Peaceful, Sad, Happy, Excited, Hungry, Angry, Fear, Meltdown" width="820" />
@@ -44,10 +45,11 @@ Everything lives in a single C++/WASM module — no JavaScript reimplementation,
 compatibility with the rest of this sandbox's native-module architecture:
 
 <p align="center">
-  <img src="docs/readme-assets/signal-flow.svg" alt="Signal flow: audio in, C++/WASM analysis, three outputs (Hunger, Health, Mood)" width="820" />
+  <img src="docs/readme-assets/signal-flow.svg" alt="Signal flow: audio in, C++/WASM analysis, out to Hunger, Health, and Mood (plus Alive and Ear Protect, not pictured)" width="820" />
 </p>
 
-A handful of cheap running stats feed the mood decision every sample:
+A handful of cheap running stats feed the mood decision every sample. The diagram shows the
+original three readouts; `Alive` and `Ear Protect` (below) came later and tap the same analysis.
 
 | Signal | What it tracks |
 |---|---|
