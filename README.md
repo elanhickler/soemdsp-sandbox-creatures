@@ -65,12 +65,21 @@ before any comparison against it means anything. That bug (Hunger getting stuck 
 was one of two real ones caught by driving the compiled `.wasm` directly through `wasmtime`, outside
 the browser entirely, before this was trusted as a working prototype.
 
+## Voice inspiration
+
+Not implemented yet, but on the table: giving the Creature a voice that reacts to its mood instead
+of (or alongside) the LCD readout. These two clips are reference material for what that could sound
+like — click through to play:
+
+- [`vocal-feedback.mp3`](docs/readme-assets/vocal-feedback.mp3)
+- [`cute_robot.mp3`](docs/readme-assets/cute_robot.mp3)
+
 ## Status
 
 Work in progress. The core module, mood logic, and both the offline and realtime signal paths are
 wired up and verified directly against the compiled binary. Still open: more play-testing of the
-mood thresholds against real patches, and a proper LCD-style readout widget for the node itself
-(the [DSEG](https://github.com/keshikan/DSEG) font is queued up for that).
+mood thresholds against real patches, a proper LCD-style readout widget for the node itself (the
+[DSEG](https://github.com/keshikan/DSEG) font is queued up for that), and possibly a voice.
 
 ---
 
