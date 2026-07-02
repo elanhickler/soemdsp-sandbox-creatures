@@ -109,6 +109,37 @@ with itself indefinitely. A few concrete directions:
 
 None of this is implemented yet — it's a direction, not a spec.
 
+## Agentic personality
+
+Right now the Creature only reports what it senses — Hunger, Health, and Mood flow outward, but
+nothing flows back in. The next idea is a small closed loop of its own: **perceive → decide → act**,
+with a persistent personality that colors every step, so two Creature nodes wired to the same
+signal don't necessarily behave the same way.
+
+<p align="center">
+  <img src="docs/readme-assets/agentic-loop.svg" alt="Perceive, decide, act loop, biased by persistent personality traits like Resilience, Curiosity, and Volatility Tolerance" width="820" />
+</p>
+
+- **A small trait set, not a personality engine.** A handful of persistent numbers — Resilience,
+  Curiosity, Volatility Tolerance, Expressiveness — set once per node and never touched by the audio
+  itself. They don't replace the mood priority chain, they bias its thresholds: a "resilient"
+  instance shrugs off a clip spike that would send a "jumpy" one straight to Fear.
+- **Adaptive expectation, not a fixed setpoint.** The comfort band is currently two fixed
+  parameters. An agentic version could let the existing slow ~10-second baseline become the
+  setpoint over a whole session, so a Creature fed quiet textures for an hour starts treating that
+  as normal instead of forever comparing itself to a hardcoded number.
+- **Acting back, not just reporting.** The real "agentic" step: an output that reaches back into
+  the patch instead of only describing itself outward — a small nudge to its own sensitivity, a
+  request-for-attention pulse when neglected, something shaped like an action rather than a readout.
+- **Scarring, not just state.** Health already tracks the real stakes. A close call with death could
+  leave a small permanent trait shift behind — more cautious afterward — rather than resetting
+  cleanly the moment it recovers. History that outlives the event that caused it.
+- **Kept honest.** The whole loop stays inside the same C++/WASM boundary as everything else here —
+  no hidden external calls, no black box. Whatever "decides" is still a deterministic, inspectable
+  function of state, just a slower and more personal one than the moment-to-moment mood chain.
+
+Not implemented yet either — it's the next direction after the ambient work above.
+
 ## Status
 
 Work in progress. The core module, mood logic, and both the offline and realtime signal paths are

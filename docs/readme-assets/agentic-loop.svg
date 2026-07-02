@@ -1,0 +1,59 @@
+<svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Agentic personality loop diagram">
+  <title>Perceive, decide, act -- biased by a small set of persistent personality traits</title>
+  <rect x="0" y="0" width="900" height="340" fill="#040709"/>
+
+  <defs>
+    <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#7fc7d9"/>
+    </marker>
+  </defs>
+
+  <!-- three loop stages -->
+  <g transform="translate(60,40)">
+    <rect x="0" y="0" width="190" height="90" rx="10" fill="#0a1113" stroke="#3de0ff" stroke-opacity="0.55" stroke-width="2"/>
+    <text x="95" y="34" font-family="monospace" font-size="15" fill="#3de0ff" text-anchor="middle" font-weight="700">PERCEIVE</text>
+    <text x="95" y="56" font-family="monospace" font-size="10.5" fill="#7fc7d9" text-anchor="middle">the same signal stats</text>
+    <text x="95" y="72" font-family="monospace" font-size="10.5" fill="#7fc7d9" text-anchor="middle">already driving Mood</text>
+  </g>
+
+  <g transform="translate(355,210)">
+    <rect x="0" y="0" width="190" height="90" rx="10" fill="#0a1113" stroke="#e2a86d" stroke-opacity="0.65" stroke-width="2"/>
+    <text x="95" y="34" font-family="monospace" font-size="15" fill="#e2a86d" text-anchor="middle" font-weight="700">DECIDE</text>
+    <text x="95" y="56" font-family="monospace" font-size="10.5" fill="#e2a86d" text-anchor="middle">biased by persistent</text>
+    <text x="95" y="72" font-family="monospace" font-size="10.5" fill="#e2a86d" text-anchor="middle">personality traits</text>
+  </g>
+
+  <g transform="translate(650,40)">
+    <rect x="0" y="0" width="190" height="90" rx="10" fill="#0a1113" stroke="#ffd166" stroke-opacity="0.6" stroke-width="2"/>
+    <text x="95" y="34" font-family="monospace" font-size="15" fill="#ffd166" text-anchor="middle" font-weight="700">ACT</text>
+    <text x="95" y="56" font-family="monospace" font-size="10.5" fill="#7fc7d9" text-anchor="middle">a nudge back into the</text>
+    <text x="95" y="72" font-family="monospace" font-size="10.5" fill="#7fc7d9" text-anchor="middle">patch, not just a readout</text>
+  </g>
+
+  <!-- loop arrows -->
+  <path d="M250 100 Q330 160 400 210" stroke="#7fc7d9" stroke-width="2" fill="none" marker-end="url(#arrow3)"/>
+  <path d="M500 240 Q580 200 655 130" stroke="#7fc7d9" stroke-width="2" fill="none" marker-end="url(#arrow3)"/>
+  <path d="M700 40 Q450 -30 200 40" stroke="#7fc7d9" stroke-width="2" fill="none" marker-end="url(#arrow3)"/>
+
+  <!-- trait dials feeding DECIDE -->
+  <g transform="translate(80,230)" font-family="monospace" font-size="10" fill="#e2a86d" text-anchor="middle">
+    <g transform="translate(0,0)">
+      <circle cx="24" cy="24" r="22" fill="none" stroke="#e2a86d" stroke-opacity="0.5" stroke-width="2"/>
+      <line x1="24" y1="24" x2="24" y2="7" stroke="#e2a86d" stroke-width="2" stroke-linecap="round" transform="rotate(-40 24 24)"/>
+      <text x="24" y="62">RESILIENCE</text>
+    </g>
+    <g transform="translate(80,0)">
+      <circle cx="24" cy="24" r="22" fill="none" stroke="#e2a86d" stroke-opacity="0.5" stroke-width="2"/>
+      <line x1="24" y1="24" x2="24" y2="7" stroke="#e2a86d" stroke-width="2" stroke-linecap="round" transform="rotate(30 24 24)"/>
+      <text x="24" y="62">CURIOSITY</text>
+    </g>
+    <g transform="translate(160,0)">
+      <circle cx="24" cy="24" r="22" fill="none" stroke="#e2a86d" stroke-opacity="0.5" stroke-width="2"/>
+      <line x1="24" y1="24" x2="24" y2="7" stroke="#e2a86d" stroke-width="2" stroke-linecap="round" transform="rotate(-10 24 24)"/>
+      <text x="24" y="62">VOLATILITY TOL.</text>
+    </g>
+  </g>
+  <path d="M260 254 Q310 254 353 254" stroke="#e2a86d" stroke-width="1.5" stroke-dasharray="3 3" fill="none" marker-end="url(#arrow3)" opacity="0.7"/>
+
+  <text x="450" y="330" font-family="monospace" font-size="12" fill="#7fc7d9" text-anchor="middle" opacity="0.65">a handful of persistent numbers, set once per node -- never touched by the audio itself</text>
+</svg>
