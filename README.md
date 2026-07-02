@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/readme-assets/banner.svg" alt="Creature: an electrified tamagotchi" width="720" />
+  <img src="docs/readme-assets/banner.svg" alt="Creature: an electrified virtual pet" width="720" />
 </p>
 
 <p align="center">
@@ -12,7 +12,7 @@
 # Creature 🐾
 
 **Creature** is a fork of [`soemdsp-sandbox`](https://github.com/soundemote/soemdsp-sandbox) exploring
-a single question: *what would a Tamagotchi look like if it ate audio signal instead of food?*
+a single question: *what would a virtual pet look like if it ate audio signal instead of food?*
 
 It's a real patchable module — not a toy bolted on the side. Wire any signal into it and the
 Creature tracks two independent stats, **Hunger** and **Health**, and settles into exactly one of
@@ -64,24 +64,6 @@ All of it is smoothed in **linear envelope space**, never directly in dB — dB 
 before any comparison against it means anything. That bug (Hunger getting stuck and never recovering)
 was one of two real ones caught by driving the compiled `.wasm` directly through `wasmtime`, outside
 the browser entirely, before this was trusted as a working prototype.
-
-## Inspirations
-
-This module is a small tribute to three very different pieces of virtual-pet history:
-
-- **[Creatures 3](https://en.wikipedia.org/wiki/Creatures_(video_game_series))** (CyberLife/Mindscape) —
-  the reason "give a digital pet real stakes" felt worth doing at all. Its Norns run on an actual
-  neural-net-and-biochemistry simulation, with true permadeath and no reload-to-cheat — the closest
-  thing this hobby project has to a technical hero.
-- **[Dogz](https://en.wikipedia.org/wiki/Petz)** (PF Magic) — proof that a virtual pet doesn't need deep
-  simulation to earn affection; presentation and personality carry a huge amount of the feeling on
-  their own.
-- **[Tamagotchi](https://en.wikipedia.org/wiki/Tamagotchi)** (Bandai) — the whole reason Hunger and
-  Health are two separate, unforgiving numbers instead of one soft "happiness" meter. Simple rules,
-  real consequences, and people held actual funerals for these things in 1997.
-
-None of their assets are reproduced here — every image above was drawn from scratch for this
-project.
 
 ## Status
 

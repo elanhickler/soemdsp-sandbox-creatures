@@ -3,7 +3,7 @@
 // soemdsp-native-target: creature
 // soemdsp-native-kind: life
 
-// A little electrified Tamagotchi that eats the loudness of whatever signal
+// A little electrified virtual pet that eats the loudness of whatever signal
 // you feed it. One control-rate process() call per sample derives a handful
 // of cheap running stats (level in dB, a slow "expected" baseline, how much
 // the level has been bouncing around, how long it's been sitting near clip,

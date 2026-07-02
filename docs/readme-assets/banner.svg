@@ -25,7 +25,7 @@
   <!-- title, DSEG-flavored blocky lettering -->
   <g transform="translate(220,70)">
     <text x="0" y="40" font-family="'Consolas','Courier New',monospace" font-size="56" font-weight="700" fill="#e2f6fb" letter-spacing="4">CREATURE</text>
-    <text x="0" y="72" font-family="'Consolas','Courier New',monospace" font-size="16" fill="#7fc7d9" letter-spacing="2">an electrified tamagotchi for soemdsp-sandbox</text>
+    <text x="0" y="72" font-family="'Consolas','Courier New',monospace" font-size="16" fill="#7fc7d9" letter-spacing="2">an electrified virtual pet for soemdsp-sandbox</text>
   </g>
 
   <!-- little LCD readout strip -->
