@@ -65,6 +65,31 @@ before any comparison against it means anything. That bug (Hunger getting stuck 
 was one of two real ones caught by driving the compiled `.wasm` directly through `wasmtime`, outside
 the browser entirely, before this was trusted as a working prototype.
 
+## The goal
+
+At its core this is meant to be a companion for making music, not just a gauge. The Creature should
+recognize good listening conditions and reward them, not just tolerate them:
+
+- **Happy when the signal is loud and clean** — comfortably filling the room without threatening
+  the system playing it back.
+- **Sleepy for smooth, spacious music.** Long reverb and delay tails, slow and steady, should read
+  as restful rather than "too quiet." A Creature living with slow, spacious music should settle
+  down, not get anxious about it.
+- **Warmth is not danger.** Push the gain and a sine starts rounding off at the edges — soft,
+  analog-style saturation, beautiful rounded squares. That's a different thing entirely from
+  actually breaking: only once those rounded corners flatten out into a real square wave should it
+  read as something wrong.
+- **Meltdown has teeth.** When a signal really is that harsh, Meltdown shouldn't just be a mood
+  label — it should be the moment to act, not just report: an "ear protection engaged" response
+  that actually pulls the level back, closing the loop described in
+  [Agentic personality](#agentic-personality) below.
+
+The long-term goal is a companion that lives inside your patch and helps shape the music by mood —
+quiet when you want quiet, warm when you want warmth, and genuinely protective when something's
+about to hurt. Eventually, the same listening instincts built here could grow into something that
+helps make music outright: **teaching a system to actually hear music, and use that hearing to help
+build it — beautiful math, put to use.**
+
 ## Voice inspiration
 
 Not implemented yet, but on the table: giving the Creature a voice that reacts to its mood instead
