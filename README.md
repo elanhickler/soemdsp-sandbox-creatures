@@ -101,7 +101,6 @@ Not implemented yet, but on the table: giving the Creature a voice that reacts t
 of (or alongside) the LCD readout. These two clips are reference material for what that could sound
 like — click through to play:
 
-- [`vocal-feedback.mp3`](docs/readme-assets/vocal-feedback.mp3)
 - [`cute_robot.mp3`](docs/readme-assets/cute_robot.mp3)
 
 ## Generative ambient soundscape
